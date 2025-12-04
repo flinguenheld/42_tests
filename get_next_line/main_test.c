@@ -1,73 +1,85 @@
 #include "get_next_line.h"
+#include "fcntl.h"
 #include <stdio.h>
 
-void test_t_string()
+// Clone just to display the last line without having a leak
+char *clone(char *str)
 {
-	t_string str = str_new(NULL);
-	str = str_push_back(str, 'a');
-	str = str_push_back(str, 'b');
-	str = str_push_back(str, 'c');
-	str = str_push_back(str, 'd');
-	str = str_push_back(str, 'e');
-	str = str_push_back(str, 'f');
-	str = str_push_back(str, 'g');
-	str = str_push_back(str, 'h');
-	str = str_push_back(str, 'i');
-	str = str_push_back(str, 'j');
-
-	printf("length: %zu\n", str.length);
-	for (size_t i=0; i < str.length; i++)
-		printf("%c", str.values[i]);
-	printf("\n");
-
-	printf("Add 5000 'a' ---------------------\n");
-	for (size_t i=0; i<5000; i++)
-		str = str_push_back(str, 'a');
-
-	printf("length: %zu\n", str.length);
-
-	printf("\n");
-	printf("Pop them all ---------------------\n");
-	while (str.length > 0)
-		printf("%c", str_pop_front(&str));
-	printf("\nlength: %zu\n", str.length);
-
-	free(str.values);
+	char *new = malloc(length(str) + 1);
+	char *start = new;
+	while (*str != '\0')
+		*new++ = *str++;
+	*new = '\0';
+	return start;
 }
 
-int main()
+void test_file(char *file_name, char print_lines)
 {
-	// test_t_string();
-	// return 0;
+	printf("\n");
+	printf("---------------------------------------------------------------------------------\n");
+	printf("----------------- Try this file: ->'%s'<- ---- BUFFER SIZE = %d\n", file_name, BUFFER_SIZE);
 
-	// --
-	// int fd = open("fail", O_RDONLY);
-	// int fd = open("/etc/passwd", O_RDONLY);
-	// int fd = open("empty", O_RDONLY);
-	// int fd = open("10_without_nl.txt", O_RDONLY);
-	// int fd = open("10_with_nl.txt", O_RDONLY);
-	// int fd = open("lot_of_lines.txt", O_RDONLY);
-	int fd = open("long_line.txt", O_RDONLY);
-
-	// cc -g *.c *.h -fsanitize=address -D BUFFER_SIZE=10 && ./a.out
-
-	// int fd = 0;
+	int fd = open(file_name, O_RDONLY);
+	int i = 0;
 	char *line = NULL;
-
-	int line_number = 0;
+	char *last_line = NULL;
 	while (1)
 	{
 		line = get_next_line(fd);
 		if (line == NULL)
 		{
-			printf("null\n");
-			break ;
+			printf("-> %d lines read\n", i);
+			printf("-> last one: '%s'\n", last_line);
+			break;
 		}
-		else 
-			printf("%d -> '%s'", line_number, line);
-		free(line);
-		line_number++;
+		else
+		{
+			if (print_lines)
+				printf("line %d -> '%s'\n", i, line);
+			free(last_line);
+			last_line = clone(line);
+			free(line);
+		}
+		i++;
 	}
+	free(last_line);
+}
 
-	close(fd);
+// ./generate_files.sh
+// cc -Wall -Wextra -Werror -fsanitize=address *.c *.h -D BUFFER_SIZE=1 && ./a.out
+// cc -Wall -Wextra -Werror *.c *.h -D BUFFER_SIZE=1 && valgrind --leak-check=full --show-leak-kinds=all ./a.out
+int main()
+{
+
+	test_file("simple_line.txt",                                      1);
+	test_file("simple_line_no_nl.txt",                                1);
+
+	return 0;
+
+	test_file("no_file.txt",                                          1);
+	test_file("empty.txt",                                            1);
+	test_file("one_new_line.txt",                                     1);
+	test_file("one_tab.txt",                                          1);
+	test_file("ten_new_lines.txt",                                    1);
+	test_file("ten_new_lines_with_txt_in_the_middle.txt",             1);
+	test_file("twenty_lines_one_char.txt",                            1);
+
+	return 0;
+
+	test_file("multiple_lines.txt",                                   1);
+	test_file("multiple_lines_no_last_nl.txt",                        1);
+	test_file("multiple_long_lines.txt",                              1);
+
+	return 0;
+
+	test_file("/etc/passwd",                                          1);
+
+	return 0;
+
+	test_file("long_unique_line.txt",                                 0);
+	test_file("long_unique_line_no_nl.txt",                           0);
+	test_file("lot_of_lines.txt",                                     0);
+	test_file("lot_of_lines_no_last_nl.txt",                          0);
+
+	return 0;
 }
