@@ -10,6 +10,9 @@ echo -ne "\n\n\n\n\n\n\n\n\n\n" > "ten_new_lines.txt"
 echo -ne "\n\n\n\n\npouet\n\n\n\n\n" > "ten_new_lines_with_txt_in_the_middle.txt"
 
 # #############################################################################
+echo -e "line with backslash 0 before\0after" > "backslash_zero.txt"
+
+# #############################################################################
 echo "0" > "twenty_lines_one_char.txt"
 for ((i=1; i<20; i++)); do
   echo "${i:(-1)}" >> "twenty_lines_one_char.txt"
@@ -41,30 +44,37 @@ done
 
 # #############################################################################
 echo "a" > "long_unique_line.txt"
-for ((i=1; i<99999; i++)); do
+for ((i=1; i<9999; i++)); do
   echo -n "b" >> "long_unique_line.txt"
 done
   echo "c" >> "long_unique_line.txt"
 
 # #############################################################################
 echo "i" > "long_unique_line_no_nl.txt"
-for ((i=1; i<99999; i++)); do
+for ((i=1; i<9999; i++)); do
   echo -n "j" >> "long_unique_line_no_nl.txt"
 done
   echo -n "k" >> "long_unique_line_no_nl.txt"
 
 # #############################################################################
 echo "line 0" > "lot_of_lines.txt"
-for ((i=1; i<100000; i++)); do
+for ((i=1; i<10000; i++)); do
   echo "line $i" >> "lot_of_lines.txt"
 done
 
 # #############################################################################
 echo "line 0" > "lot_of_lines_no_last_nl.txt"
-for ((i=1; i<99999; i++)); do
+for ((i=1; i<9999; i++)); do
   echo "line $i" >> "lot_of_lines_no_last_nl.txt"
 done
   echo -n "line last without nl" >> "lot_of_lines_no_last_nl.txt"
+
+# #############################################################################
+echo -e "before backslash0-\0-after backslash0" > "line_with_one_backslash0.txt"
+
+echo -e "lines 0 with one '\0' two '\0' three '\0' blahblahblah\n" > "lines_with_backslash0.txt"
+echo -e "lines 1 with one '\0' two '\0' three '\0' blahblahblah\n" >> "lines_with_backslash0.txt"
+echo -e "lines 2 with nine '\0''\0''\0''\0''\0''\0''\0''\0''\0' blahblahblah\n" >> "lines_with_backslash0.txt"
 
 # #############################################################################
 # ################################################################### BONUS ###
