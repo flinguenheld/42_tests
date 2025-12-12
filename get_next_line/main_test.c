@@ -51,7 +51,7 @@ void test_file_with_backslash0(char *file_name, size_t len)
 {
 	printf("\n");
 	printf("---------------------------------------------------------------------------------\n");
-	printf("----------------- Try this file: ->'%s'<- ---- BUFFER SIZE = %d\n", file_name, BUFFER_SIZE);
+	printf("----------------- Special \\0: ->'%s'<- ---- BUFFER SIZE = %d\n", file_name, BUFFER_SIZE);
 
 	int fd = open(file_name, O_RDONLY);
 	int i = 0;
@@ -65,8 +65,10 @@ void test_file_with_backslash0(char *file_name, size_t len)
 		}
 		else
 		{
+			printf("\nStart of a new line ->\n");
 			for (int i = 0; i < len; i++)
 				printf("%c", line[i]);
+			printf("\n<- End of the line\n");
 		}
 		i++;
 	}
@@ -181,8 +183,8 @@ int main()
 
 	// return 0;
 
-	test_file_with_backslash0("line_with_one_backslash0.txt",  36);
-	test_file_with_backslash0("lines_with_backslash0.txt",  52);
+	test_file_with_backslash0("line_with_one_backslash0.txt", 36);
+	test_file_with_backslash0("lines_with_backslash0.txt",    46);
 
 	return 0;
 

@@ -72,9 +72,9 @@ done
 # #############################################################################
 echo -e "before backslash0-\0-after backslash0" > "line_with_one_backslash0.txt"
 
-echo -e "lines 0 with one '\0' two '\0' three '\0' blahblahblah\n" > "lines_with_backslash0.txt"
-echo -e "lines 1 with one '\0' two '\0' three '\0' blahblahblah\n" >> "lines_with_backslash0.txt"
-echo -e "lines 2 with nine '\0''\0''\0''\0''\0''\0''\0''\0''\0' blahblahblah\n" >> "lines_with_backslash0.txt"
+echo -e "line 0 with one '\0' two '\0' three '\0' aaaaaaaaaaaa" > "lines_with_backslash0.txt"
+echo -e "line 1 with one '\0' two '\0' three '\0' bbbbbbbbbbbb" >> "lines_with_backslash0.txt"
+echo -e "line 2 with more '\0''\0''\0''\0''\0''\0''\0''\0'cccc" >> "lines_with_backslash0.txt"
 
 # #############################################################################
 # ################################################################### BONUS ###

@@ -73,8 +73,8 @@ void test_files_bonus(char print_lines, int nb, ...)
 
 
 // ./generate_files.sh
-// cc -Wall -Wextra -Werror -fsanitize=address *.c *.h -D BUFFER_SIZE=1 && ./a.out
-// cc -Wall -Wextra -Werror *.c *.h -D BUFFER_SIZE=1 && valgrind --leak-check=full --show-leak-kinds=all ./a.out
+// cc -Wall -Wextra -Werror -fsanitize=address *bonus.c *bonus.h -D BUFFER_SIZE=1 && ./a.out
+// cc -Wall -Wextra -Werror *bonus.c *bonus.h -D BUFFER_SIZE=1 && valgrind --leak-check=full --show-leak-kinds=all ./a.out
 int main()
 {
 	srand(time(NULL));
@@ -85,8 +85,13 @@ int main()
 	test_files_bonus(1, 1, "one_new_line.txt"                         );
 	test_files_bonus(1, 1, "one_tab.txt"                              );
 	test_files_bonus(1, 1, "ten_new_lines.txt"                        );
+
+	// return 0;
+
 	test_files_bonus(1, 1, "ten_new_lines_with_txt_in_the_middle.txt" );
 	test_files_bonus(1, 1, "twenty_lines_one_char.txt"                );
+
+	test_files_bonus(1, 1, "simple_line_no_nl.txt"                    );
 
 	// return 0;
 
@@ -118,7 +123,7 @@ int main()
 
 	test_files_bonus(1, 1, "/etc/passwd");
 
-	return 0;
+	// return 0;
 
 	// Empty files
 	test_files_bonus(1, 3, "bonus_empty_file_1.txt",
