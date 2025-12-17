@@ -69,6 +69,7 @@ void test_file_with_backslash0(char *file_name, size_t len)
 			for (int i = 0; i < len; i++)
 				printf("%c", line[i]);
 			printf("\n<- End of the line\n");
+			free(line);
 		}
 		i++;
 	}
